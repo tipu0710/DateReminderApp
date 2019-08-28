@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activity.MainActivity"
+    tools:showIn="@layout/app_bar_main">
+
+    <LinearLayout
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_gravity="left"
+            android:gravity="left"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <com.github.pavlospt.CircleView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/total_loan"
+                android:layout_gravity="center"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                app:cv_titleText="60000"
+                app:cv_subtitleText="BDT"
+                app:cv_titleSize="30dp"
+                app:cv_subtitleSize="8dp"
+                app:cv_titleColor="#FFFFFF"
+                app:cv_subtitleColor="#FFFFFF"
+                app:cv_strokeColorValue="#8BC34A"
+                app:cv_backgroundColorValue="#FFFFFF"
+                app:cv_fillColor="#FF9800"
+                app:cv_fillRadius=".9"
+                app:cv_strokeWidthSize="8" />
+            <TextView
+                android:layout_marginTop="15dp"
+                android:text="Total Loan"
+                android:textSize="25dp"
+                android:layout_gravity="center"
+                android:textColor="#FF9800"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <com.github.pavlospt.CircleView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/total_borrow"
+                android:layout_gravity="center"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                app:cv_titleText="60000"
+                app:cv_subtitleText="BDT"
+                app:cv_titleSize="30dp"
+                app:cv_subtitleSize="8dp"
+                app:cv_titleColor="#FFFFFF"
+                app:cv_subtitleColor="#FFFFFF"
+                app:cv_strokeColorValue="#FFC107"
+                app:cv_backgroundColorValue="#FFFFFF"
+                app:cv_fillColor="#8BC34A"
+                app:cv_fillRadius=".9"
+                app:cv_strokeWidthSize="8" />
+            <TextView
+                android:layout_marginTop="15dp"
+                android:text="Total Borrow"
+                android:textSize="25dp"
+                android:layout_gravity="center"
+                android:textColor="#8BC34A"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:layout_margin="20dp"
+        android:id="@+id/pie_chart"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+
+    </com.github.mikephil.charting.charts.PieChart>
+
+</LinearLayout>

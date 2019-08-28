@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ProfileEditActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_edit_image"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/administrator"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="20dp"/>
+
+        <LinearLayout
+            android:id="@+id/outline"
+            android:gravity="center"
+            android:layout_below="@id/profile_edit_image"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:background="@drawable/slr_camera"
+                android:id="@+id/edit_camera"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp" />
+            <ImageButton
+                android:background="@drawable/gallery"
+                android:id="@+id/edit_gallery"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp" />
+        </LinearLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_name"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:textAlignment="center"
+            android:hint="Name"
+            android:layout_below="@id/outline"
+            android:layout_centerHorizontal="true"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_phone"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:textAlignment="center"
+            android:hint="phone number"
+            android:layout_below="@id/edit_name"
+            android:layout_centerHorizontal="true"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_address"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:textAlignment="center"
+            android:hint="address"
+            android:layout_below="@id/edit_phone"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_register_"
+            android:layout_below="@id/edit_address"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="UPDATE"/>
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_security_question"
+            android:layout_below="@id/edit_register_"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="Change security questions"/>
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_change_pass"
+            android:layout_below="@id/edit_security_question"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="Change password"/>
+    </RelativeLayout>
+
+</ScrollView>

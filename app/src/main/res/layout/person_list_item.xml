@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/main_view"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="6dp"
+        card_view:cardElevation="3dp"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardMaxElevation="5dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="#FCF7F7"
+            android:orientation="horizontal"
+            android:weightSum="7">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/person_list_profile"
+                android:layout_width="0dp"
+                android:layout_height="70dp"
+                android:layout_weight="2"
+                android:src="@drawable/administrator" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_person_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Person Name"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_person_phone_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#03A9F4"
+                    android:text="Person Phone No" />
+
+                <TextView
+                    android:id="@+id/txt_person_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#03A9F4"
+                    android:visibility="gone"
+                    android:text="Amount"/>
+
+                <TextView
+                    android:id="@+id/txt_person_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#03A9F4"
+                    android:text="Person Date Of Birth" />
+
+                <TextView
+                    android:id="@+id/txt_person_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#03A9F4"
+                    android:text="Time" />
+
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/img_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="4dp"
+                android:src="@drawable/money_bag"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+</FrameLayout>

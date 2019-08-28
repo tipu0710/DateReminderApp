@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txt_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Person"
+        android:gravity="center"
+        android:textColor="@color/colorPrimary"
+        android:layout_margin="10dp"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_marginTop="20dp"
+        android:id="@+id/dialog_profile"
+        android:src="@drawable/administrator"
+        android:layout_gravity="center"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:background="@drawable/slr_camera"
+            android:id="@+id/camera_dialog"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp" />
+        <ImageButton
+            android:background="@drawable/gallery"
+            android:id="@+id/gallery_dialog"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp" />
+    </LinearLayout>
+
+
+    <EditText
+        android:layout_marginTop="20dp"
+        android:id="@+id/txt_person_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Person Name" />
+
+
+    <EditText
+        android:id="@+id/txt_person_phone_no"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:hint="Enter Phone Number" />
+
+    <EditText
+        android:id="@+id/txt_person_amount"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Amount"
+        android:inputType="number"/>
+
+    <TextView
+        android:id="@+id/txt_person_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="17sp"
+        android:hint="Enter Date" />
+    <TextView
+        android:id="@+id/txt_person_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="17sp"
+        android:hint="Enter Time" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_add_person"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:src="@android:drawable/ic_input_add" />
+
+</LinearLayout>

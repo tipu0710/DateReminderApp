@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:context=".activity.ChangePasswordActivity">
+
+    <TextView
+        android:text="Enter old password"
+        android:layout_marginTop="100dp"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/cng_old_pass"
+        android:layout_width="250dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:inputType="textVisiblePassword"/>
+    <TextView
+        android:text="Enter new password"
+        android:layout_marginTop="50dp"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/cng_new_pass"
+        android:layout_width="250dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:inputType="textVisiblePassword"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change"
+        android:id="@+id/cng_pass_btn"
+        android:layout_marginTop="50dp"/>
+
+</LinearLayout>

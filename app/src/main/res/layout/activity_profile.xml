@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ProfileActivity">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profile_image"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:src="@drawable/administrator"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"/>
+
+    <LinearLayout
+        android:id="@+id/outline"
+        android:gravity="center"
+        android:layout_below="@id/profile_image"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:background="@drawable/slr_camera"
+            android:id="@+id/camera"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp" />
+        <ImageButton
+            android:background="@drawable/gallery"
+            android:id="@+id/gallery"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp" />
+    </LinearLayout>
+
+    <EditText
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/outline"
+        android:id="@+id/user_phone"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:hint="Enter phone number"
+        android:textAlignment="center"
+        android:inputType="phone"/>
+    <EditText
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_phone"
+        android:id="@+id/user_address"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:hint="Enter full address (Optional)"
+        android:textAlignment="center"/>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/register_"
+        android:layout_below="@id/user_address"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="register"/>
+
+</RelativeLayout>
