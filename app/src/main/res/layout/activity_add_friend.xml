@@ -1,91 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    android:orientation="vertical"
     tools:context=".activity.AddFriend">
 
-    <TextView
-        android:id="@+id/txt_label_f"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add Person"
-        android:gravity="center"
-        android:textColor="@color/colorPrimary"
-        android:layout_margin="10dp"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+   <LinearLayout
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+       <TextView
+           android:id="@+id/txt_label_f"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="Add Person"
+           android:gravity="center"
+           android:textColor="@color/colorPrimary"
+           android:layout_margin="10dp"
+           android:textSize="20sp"
+           android:textStyle="bold" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_marginTop="20dp"
-        android:id="@+id/dialog_profile_f"
-        android:src="@drawable/administrator"
-        android:layout_gravity="center"
-        android:layout_width="60dp"
-        android:layout_height="60dp" />
+       <de.hdodenhof.circleimageview.CircleImageView
+           android:layout_marginTop="20dp"
+           android:id="@+id/dialog_profile_f"
+           android:src="@drawable/administrator"
+           android:layout_gravity="center"
+           android:layout_width="60dp"
+           android:layout_height="60dp" />
 
-    <LinearLayout
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageButton
-            android:background="@drawable/slr_camera"
-            android:id="@+id/camera_dialog_f"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginEnd="20dp" />
-        <ImageButton
-            android:background="@drawable/gallery"
-            android:id="@+id/gallery_dialog_f"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp" />
-    </LinearLayout>
-
-
-    <EditText
-        android:layout_marginTop="20dp"
-        android:id="@+id/txt_person_name_f"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter Person Name" />
+       <LinearLayout
+           android:gravity="center"
+           android:layout_marginTop="20dp"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+           <ImageButton
+               android:background="@drawable/slr_camera"
+               android:id="@+id/camera_dialog_f"
+               android:layout_width="30dp"
+               android:layout_height="30dp"
+               android:layout_marginRight="20dp"
+               android:layout_marginEnd="20dp" />
+           <ImageButton
+               android:background="@drawable/gallery"
+               android:id="@+id/gallery_dialog_f"
+               android:layout_width="30dp"
+               android:layout_height="30dp"
+               android:layout_marginLeft="20dp"
+               android:layout_marginStart="20dp" />
+       </LinearLayout>
 
 
-    <EditText
-        android:id="@+id/txt_person_phone_no_f"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:hint="Enter Phone Number" />
+       <EditText
+           android:layout_marginTop="20dp"
+           android:id="@+id/txt_person_name_f"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:hint="Enter Person Name" />
 
 
-    <TextView
-        android:id="@+id/txt_person_date_f"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:textSize="17sp"
-        android:hint="Enter Date" />
-    <TextView
-        android:id="@+id/txt_person_time_f"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:textSize="17sp"
-        android:hint="Enter Time" />
+       <EditText
+           android:id="@+id/txt_person_phone_no_f"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:inputType="phone"
+           android:hint="Enter Phone Number" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_person_f"
+
+       <TextView
+           android:id="@+id/txt_person_date_f"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:padding="10dp"
+           android:textSize="17sp"
+           android:hint="Enter Date" />
+       <TextView
+           android:id="@+id/txt_person_time_f"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:padding="10dp"
+           android:textSize="17sp"
+           android:hint="Enter Time" />
+
+       <android.support.design.widget.FloatingActionButton
+           android:id="@+id/fab_add_person_f"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:layout_marginTop="15dp"
+           android:src="@android:drawable/ic_input_add" />
+
+   </LinearLayout>
+
+    <com.github.ybq.android.spinkit.SpinKitView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:src="@android:drawable/ic_input_add" />
+        android:id="@+id/bar_friend"
+        android:visibility="gone"
+        style="@style/SpinKitView.Large.Wave"
+        android:layout_centerInParent="true"
+        app:SpinKit_Color="@color/colorAccent"/>
 
-</LinearLayout>
+</RelativeLayout>

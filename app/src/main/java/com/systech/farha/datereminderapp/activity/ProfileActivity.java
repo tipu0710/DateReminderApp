@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +15,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
+import com.github.ybq.android.spinkit.style.Wave;
 import com.systech.farha.datereminderapp.R;
 import com.systech.farha.datereminderapp.database.DatabaseHelper;
 import com.systech.farha.datereminderapp.helper.SessionManager;
@@ -26,6 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 import static com.systech.farha.datereminderapp.activity.MainActivity.REG_PREFS_NAME;
 
@@ -34,8 +40,13 @@ public class ProfileActivity extends AppCompatActivity {
     private CircleImageView profilePic;
     private Button register;
     private EditText phoneEt, addressEt;
+    private ProgressBar progressBar;
+    private Sprite doubleBounce;
+    private byte[] imageByte;
     DatabaseHelper databaseHelper;
     SessionManager session;
+
+    String phone, address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +58,8 @@ public class ProfileActivity extends AppCompatActivity {
         profilePic = findViewById(R.id.profile_image);
         phoneEt = findViewById(R.id.user_phone);
         addressEt = findViewById(R.id.user_address);
+        progressBar = findViewById(R.id.progress);
+        doubleBounce = new Wave();
 
 
         session = new SessionManager(getApplicationContext());
@@ -72,42 +85,15 @@ public class ProfileActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String address = addressEt.getText().toString();
-                String phone = phoneEt.getText().toString();
+                address = addressEt.getText().toString();
+                phone = phoneEt.getText().toString();
                 if (address.isEmpty()){
                     address = "";
                 }
                 if (phone.isEmpty()){
                     phoneEt.setError("Enter phone number");
                 }else {
-                    Bitmap bitmap = ((BitmapDrawable)profilePic.getDrawable()).getBitmap();
-                    byte[] imageByte = getBitmapAsByteArray(bitmap);
-                    SharedPreferences prefs = getSharedPreferences(REG_PREFS_NAME, MODE_PRIVATE);
-                    User user = new User();
-                    user.setName(prefs.getString("name", null));
-                    user.setEmail(prefs.getString("email",null));
-                    user.setPassword(prefs.getString("password", null));
-                    user.setQuestion1(prefs.getString("ques1", null));
-                    user.setQuestion2(prefs.getString("ques2",null));
-                    user.setAnswer1(prefs.getString("ans1", null));
-                    user.setAnswer2(prefs.getString("ans2", null));
-                    user.setPhone(phone);
-                    user.setAddress(address);
-                    user.setProfile(imageByte);
-
-                    databaseHelper.addUser(user);
-
-                    if (databaseHelper.checkUser(user.getEmail())) {
-                        Toast.makeText(getApplicationContext(), "Registration Successful!", Toast.LENGTH_LONG).show();
-
-                        int userId = databaseHelper.getUserIdByEmail(user.getEmail());
-
-                        session.storeLoginSession(String.valueOf(userId), user.getEmail());
-                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                        getSharedPreferences(REG_PREFS_NAME, MODE_PRIVATE).edit().clear().apply();
-                        startActivity(i);
-                        finish();
-                    }
+                    new LoadData().execute();
                 }
 
             }
@@ -145,12 +131,71 @@ public class ProfileActivity extends AppCompatActivity {
     public static byte[] getBitmapAsByteArray(Bitmap bitmap) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
-        return outputStream.toByteArray();
+        byte[] size = outputStream.toByteArray();
+        float length = (float) ((float) size.length/1024.0);
+
+        if (length>2048){
+            Bitmap finalBitmap = Bitmap.createScaledBitmap(bitmap,(int)(bitmap.getWidth()*0.8), (int)(bitmap.getHeight()*0.8), true);
+            byte[] newByte = getBitmapAsByteArray(finalBitmap);
+            return newByte;
+        }else {
+            return size;
+        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+    }
+
+    private class LoadData extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Bitmap bitmap = ((BitmapDrawable)profilePic.getDrawable()).getBitmap();
+            imageByte = getBitmapAsByteArray(bitmap);
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setIndeterminateDrawable(doubleBounce);
+            register.setClickable(false);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressBar.setVisibility(View.GONE);
+            SharedPreferences prefs = getSharedPreferences(REG_PREFS_NAME, MODE_PRIVATE);
+            User user = new User();
+            user.setName(prefs.getString("name", null));
+            user.setEmail(prefs.getString("email",null));
+            user.setPassword(prefs.getString("password", null));
+            user.setQuestion1(prefs.getString("ques1", null));
+            user.setQuestion2(prefs.getString("ques2",null));
+            user.setAnswer1(prefs.getString("ans1", null));
+            user.setAnswer2(prefs.getString("ans2", null));
+            user.setPhone(phone);
+            user.setAddress(address);
+            user.setProfile(imageByte);
+
+            databaseHelper.addUser(user);
+
+            if (databaseHelper.checkUser(user.getEmail())) {
+                int userId = databaseHelper.getUserIdByEmail(user.getEmail());
+
+                session.storeLoginSession(String.valueOf(userId), user.getEmail());
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                getSharedPreferences(REG_PREFS_NAME, MODE_PRIVATE).edit().clear().apply();
+
+                register.setClickable(true);
+                startActivity(i);
+                finish();
+            }
+        }
     }
 }

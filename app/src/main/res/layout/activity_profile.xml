@@ -70,4 +70,15 @@
         android:layout_marginTop="50dp"
         android:text="register"/>
 
+    <com.github.ybq.android.spinkit.SpinKitView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/progress"
+        android:visibility="gone"
+        style="@style/SpinKitView.Large.Wave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        app:SpinKit_Color="@color/colorAccent" />
+
 </RelativeLayout>

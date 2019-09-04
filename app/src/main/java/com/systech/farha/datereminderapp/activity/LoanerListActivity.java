@@ -1,9 +1,5 @@
 package com.systech.farha.datereminderapp.activity;
 
-import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,31 +7,24 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.systech.farha.datereminderapp.R;
-import com.systech.farha.datereminderapp.alarm.CreateNote;
-import com.systech.farha.datereminderapp.alarm.SetAlarm;
 import com.systech.farha.datereminderapp.adapter.LoanerAdapter;
 import com.systech.farha.datereminderapp.database.DatabaseHelper;
 import com.systech.farha.datereminderapp.helper.SessionManager;
 import com.systech.farha.datereminderapp.model.Person;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 public class LoanerListActivity extends AppCompatActivity {
     private Person loaner;

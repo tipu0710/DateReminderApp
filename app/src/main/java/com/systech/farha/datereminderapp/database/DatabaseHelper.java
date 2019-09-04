@@ -6,12 +6,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.systech.farha.datereminderapp.model.Person;
 import com.systech.farha.datereminderapp.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TooManyListenersException;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -50,31 +53,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + ")";
 
     private String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + TABLE_USER;
-
-
-    //ALARM TABLE
-    public static final String TABLE_ALARM = "alarm";
-    public static final String C_ID = "_id";
-    public static final String TITLE = "title";
-    public static final String TYPE = "type";
-    public static final String DETAIL = "description";
-    public static final String TIME = "time";
-    public static final String DATE = "date";
-    public static final String ALARM_USER_ID = "alarm_user_id";
-
-    private final String CREATE_ALARM_TABLE = "create table " + TABLE_ALARM + " ( "
-            + C_ID + " integer primary key autoincrement, "
-            + TITLE + " text, "
-            + DETAIL + " text, "
-            + TYPE + " text, "
-            + TIME + " text, "
-            + DATE + " text, "
-            + ALARM_USER_ID + " INTEGER NOT NULL,"
-            + "CONSTRAINT FK_USER FOREIGN KEY (" + ALARM_USER_ID + ")"
-            + " REFERENCES " + TABLE_USER + "(" + USER_ID + ")"
-            + ")";
-
-    private String DROP_ALARM_TABLE = "DROP TABLE IF EXISTS " + TABLE_ALARM;
 
     //PERSON TABLE
     private static final String TABLE_PERSON = "person";
@@ -134,14 +112,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL(CREATE_PERSON_TABLE);
-        db.execSQL(CREATE_ALARM_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(DROP_USER_TABLE);
         db.execSQL(DROP_PERSON_TABLE);
-        db.execSQL(DROP_ALARM_TABLE);
 
         onCreate(db);
     }
@@ -370,7 +346,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(PERSON_LOAN_HAS_PAID, person.getLoanHasPaid());
         values.put(PERSON_BORROW_HAS_PAID, person.getBorrowHasPaid());
         values.put(PERSON_PROFILE, person.getProfile());
-
 
         db.insert(TABLE_PERSON, null, values);
         db.close();

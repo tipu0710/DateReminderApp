@@ -26,7 +26,6 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.pavlospt.CircleView;
 import com.systech.farha.datereminderapp.R;
-import com.systech.farha.datereminderapp.alarm.AlarmActivity;
 import com.systech.farha.datereminderapp.database.DatabaseHelper;
 import com.systech.farha.datereminderapp.helper.SessionManager;
 import com.systech.farha.datereminderapp.model.Person;
@@ -37,7 +36,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static java.lang.StrictMath.round;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

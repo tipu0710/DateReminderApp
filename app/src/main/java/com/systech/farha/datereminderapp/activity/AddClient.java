@@ -3,10 +3,12 @@ package com.systech.farha.datereminderapp.activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -16,15 +18,19 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.Wave;
 import com.systech.farha.datereminderapp.R;
 import com.systech.farha.datereminderapp.alarm.SetAlarm;
 import com.systech.farha.datereminderapp.database.DatabaseHelper;
 import com.systech.farha.datereminderapp.helper.SessionManager;
 import com.systech.farha.datereminderapp.model.Person;
+import com.systech.farha.datereminderapp.model.User;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -36,6 +42,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.systech.farha.datereminderapp.activity.BorrowerListActivity.BORROW;
 import static com.systech.farha.datereminderapp.activity.LoanerListActivity.LOAN;
+import static com.systech.farha.datereminderapp.activity.MainActivity.REG_PREFS_NAME;
 import static com.systech.farha.datereminderapp.activity.ProfileActivity.getBitmapAsByteArray;
 import static com.systech.farha.datereminderapp.adapter.BorrowerAdapter.BORROW_ADD;
 import static com.systech.farha.datereminderapp.adapter.BorrowerAdapter.BORROW_EDIT;
@@ -64,6 +71,11 @@ public class AddClient extends AppCompatActivity {
     private String amountS;
     private int id;
     int finalHour, finalMinute, day, month, year = 0;
+    byte[] imageByte;
+
+    private ProgressBar progressBar;
+    private Sprite doubleBounce;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,9 +91,11 @@ public class AddClient extends AppCompatActivity {
         txtTime = findViewById(R.id.txt_person_time);
         txtAmount = findViewById(R.id.txt_person_amount);
         fabAddPerson = findViewById(R.id.fab_add_person);
-        proPic = findViewById(R.id.dialog_profile);
+        proPic = findViewById(R.id.dialog_profile_c);
         cameraBtn = findViewById(R.id.camera_dialog);
         galleryBtn = findViewById(R.id.gallery_dialog);
+        progressBar = findViewById(R.id.progress_client);
+        doubleBounce = new Wave();
 
         txtName.setHint("Enter Borrower Name");
         txtDate.setHint("Enter Date");
@@ -225,74 +239,7 @@ public class AddClient extends AppCompatActivity {
                 }else if (amountS.isEmpty()){
                     txtAmount.setError("Enter amount");
                 }else {
-                    amount = Double.valueOf(amountS);
-
-                    person.setName(name);
-                    person.setPhoneNo(phoneNo);
-                    Bitmap bitmap = ((BitmapDrawable)proPic.getDrawable()).getBitmap();
-                    byte[] imageByte = getBitmapAsByteArray(bitmap);
-                    person.setProfile(imageByte);
-                    switch (type){
-                        case BORROW:
-                            person.setBorrow("T");
-                            person.setLoan("F");
-                            person.setFriend("F");
-                            person.setLoanHasPaid(hasPaid);
-                            person.setBorrowHasPaid(hasPaid);
-                            person.setUserId(userId);
-                            person.setBorrowDate(date);
-                            person.setTimeBorrower(finalHour+":"+finalMinute);
-                            person.setAmountBorrow(amount);
-
-                            databaseHelper.addPerson(person);
-                            break;
-                        case BORROW_EDIT:
-                            person.setBorrowDate(date);
-                            person.setTimeBorrower(finalHour+":"+finalMinute);
-                            person.setAmountBorrow(amount);
-                            databaseHelper.updatePerson(person);
-                            break;
-                        case BORROW_ADD:
-                            person.setBorrow("T");
-                            person.setBorrowHasPaid(hasPaid);
-                            person.setBorrowDate(date);
-                            person.setTimeBorrower(finalHour+":"+finalMinute);
-                            person.setAmountBorrow(amount);
-                            databaseHelper.updatePerson(person);
-                            break;
-                        case LOAN:
-                            person.setBorrow("F");
-                            person.setLoan("T");
-                            person.setFriend("F");
-                            person.setLoanHasPaid(hasPaid);
-                            person.setBorrowHasPaid(hasPaid);
-                            person.setUserId(userId);
-                            person.setLoanDate(date);
-                            person.setTimeLoner(finalHour+":"+finalMinute);
-                            person.setAmountLoan(amount);
-                            databaseHelper.addPerson(person);
-                            break;
-                        case LOAN_EDIT:
-                            person.setLoanDate(date);
-                            person.setTimeLoner(finalHour+":"+finalMinute);
-                            person.setAmountLoan(amount);
-                            databaseHelper.updatePerson(person);
-                            break;
-                        case LOAN_ADD:
-                            person.setLoan("T");
-                            person.setLoanHasPaid(hasPaid);
-                            person.setLoanDate(date);
-                            person.setTimeLoner(finalHour+":"+finalMinute);
-                            person.setAmountLoan(amount);
-                            databaseHelper.updatePerson(person);
-                            break;
-
-                    }
-
-                    if(databaseHelper.checkPerson(name, phoneNo)){
-                        SetAlarm.SetAlarms(AddClient.this, month, day, finalHour, finalMinute);
-                        backToParent();
-                    }
+                    new LoadData().execute();
                 }
 
             }
@@ -347,6 +294,95 @@ public class AddClient extends AppCompatActivity {
                 startActivity(new Intent(AddClient.this,LoanerListActivity.class));
                 finish();
                 break;
+        }
+    }
+
+    private class LoadData extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Bitmap bitmap = ((BitmapDrawable)proPic.getDrawable()).getBitmap();
+            imageByte = getBitmapAsByteArray(bitmap);
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setIndeterminateDrawable(doubleBounce);
+            fabAddPerson.setClickable(false);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressBar.setVisibility(View.GONE);
+            amount = Double.valueOf(amountS);
+            person.setName(name);
+            person.setPhoneNo(phoneNo);
+            person.setProfile(imageByte);
+            switch (type){
+                case BORROW:
+                    person.setBorrow("T");
+                    person.setLoan("F");
+                    person.setFriend("F");
+                    person.setLoanHasPaid(hasPaid);
+                    person.setBorrowHasPaid(hasPaid);
+                    person.setUserId(userId);
+                    person.setBorrowDate(date);
+                    person.setTimeBorrower(finalHour+":"+finalMinute);
+                    person.setAmountBorrow(amount);
+
+                    databaseHelper.addPerson(person);
+                    break;
+                case BORROW_EDIT:
+                    person.setBorrowDate(date);
+                    person.setTimeBorrower(finalHour+":"+finalMinute);
+                    person.setAmountBorrow(amount);
+                    databaseHelper.updatePerson(person);
+                    break;
+                case BORROW_ADD:
+                    person.setBorrow("T");
+                    person.setBorrowHasPaid(hasPaid);
+                    person.setBorrowDate(date);
+                    person.setTimeBorrower(finalHour+":"+finalMinute);
+                    person.setAmountBorrow(amount);
+                    databaseHelper.updatePerson(person);
+                    break;
+                case LOAN:
+                    person.setBorrow("F");
+                    person.setLoan("T");
+                    person.setFriend("F");
+                    person.setLoanHasPaid(hasPaid);
+                    person.setBorrowHasPaid(hasPaid);
+                    person.setUserId(userId);
+                    person.setLoanDate(date);
+                    person.setTimeLoner(finalHour+":"+finalMinute);
+                    person.setAmountLoan(amount);
+                    databaseHelper.addPerson(person);
+                    break;
+                case LOAN_EDIT:
+                    person.setLoanDate(date);
+                    person.setTimeLoner(finalHour+":"+finalMinute);
+                    person.setAmountLoan(amount);
+                    databaseHelper.updatePerson(person);
+                    break;
+                case LOAN_ADD:
+                    person.setLoan("T");
+                    person.setLoanHasPaid(hasPaid);
+                    person.setLoanDate(date);
+                    person.setTimeLoner(finalHour+":"+finalMinute);
+                    person.setAmountLoan(amount);
+                    databaseHelper.updatePerson(person);
+                    break;
+
+            }
+
+            if(databaseHelper.checkPerson(name, phoneNo)){
+                SetAlarm.SetAlarms(AddClient.this, month, day, finalHour, finalMinute);
+                backToParent();
+            }
         }
     }
 }

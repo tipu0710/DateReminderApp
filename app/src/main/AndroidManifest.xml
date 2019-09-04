@@ -24,25 +24,9 @@
         <activity android:name=".activity.QuestionActivity" />
         <activity android:name=".activity.ProfileActivity" />
         <activity
-            android:name=".alarm.Edit_Note"
-            android:noHistory="true"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".alarm.View_Note"
-            android:noHistory="true"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".alarm.Alert"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".alarm.CreateNote"
-            android:noHistory="true"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".alarm.AlarmActivity"
-            android:noHistory="true"
-            android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.EventActivity"
             android:noHistory="true" />
@@ -85,26 +69,9 @@
         <service
             android:name=".alarm.RingtonePlayingService"
             android:enabled="true" />
-        <service
-            android:name=".alarm.RingtonePlayingJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <receiver
-            android:name=".alarm.BroadcastAlarm"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-
-            </intent-filter>
-        </receiver>
         <receiver android:name=".alarm.AlarmReceiver"
             android:process=":remote">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".alarm.NotificationManager2">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

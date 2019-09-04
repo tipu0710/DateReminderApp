@@ -3,10 +3,12 @@ package com.systech.farha.datereminderapp.activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -18,15 +20,19 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.Wave;
 import com.systech.farha.datereminderapp.R;
 import com.systech.farha.datereminderapp.alarm.SetAlarm;
 import com.systech.farha.datereminderapp.database.DatabaseHelper;
 import com.systech.farha.datereminderapp.helper.SessionManager;
 import com.systech.farha.datereminderapp.model.Person;
+import com.systech.farha.datereminderapp.model.User;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -34,6 +40,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 
+import static com.systech.farha.datereminderapp.activity.MainActivity.REG_PREFS_NAME;
 import static com.systech.farha.datereminderapp.activity.ProfileActivity.getBitmapAsByteArray;
 
 public class AddFriend extends AppCompatActivity {
@@ -44,12 +51,15 @@ public class AddFriend extends AppCompatActivity {
     FloatingActionButton fabAddPerson;
     ImageView proPic;
     ImageButton galleryImgBtn, cameraBtn;
+    byte[]imageByte;
 
     String name, phoneNo, date;
 
     int finalHour, finalMinute, day, month = 0, years;
     SessionManager session;
     boolean isEdit = false;
+    private ProgressBar progressBar;
+    private Sprite doubleBounce;
 
     DatabaseHelper databaseHelper;
     HashMap<String, String> user;
@@ -68,6 +78,8 @@ public class AddFriend extends AppCompatActivity {
         proPic = findViewById(R.id.dialog_profile_f);
         cameraBtn = findViewById(R.id.camera_dialog_f);
         galleryImgBtn = findViewById(R.id.gallery_dialog_f);
+        progressBar = findViewById(R.id.bar_friend);
+        doubleBounce = new Wave();
 
         friend = new Person();
 
@@ -171,42 +183,7 @@ public class AddFriend extends AppCompatActivity {
                 }else if (phoneNo.isEmpty()){
                     txtPhoneNo.setError("Enter phone number!");
                 }else {
-                    friend.setName(name);
-                    friend.setPhoneNo(phoneNo);
-                    friend.setFriendDate(date);
-                    friend.setTimeFriend(finalHour+":"+finalMinute);
-                    friend.setUserId(userId);
-                    Bitmap bitmap = ((BitmapDrawable)proPic.getDrawable()).getBitmap();
-                    byte[] imageByte = getBitmapAsByteArray(bitmap);
-                    friend.setProfile(imageByte);
-
-                    if (isEdit){
-                        boolean b = databaseHelper.updatePerson(friend);
-                        if (b){
-                            Toast.makeText(AddFriend.this, "Update Successfully", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(AddFriend.this, FriendListActivity.class));
-                            finish();
-                        }
-                    }else {
-                        friend.setAmountBorrow(null);
-                        friend.setAmountLoan(null);
-                        friend.setFriend("T");
-                        friend.setLoan("F");
-                        friend.setBorrow("F");
-                        friend.setLoanHasPaid(false);
-                        friend.setBorrowHasPaid(false);
-                        databaseHelper.addPerson(friend);
-
-                        if(databaseHelper.checkPerson(name, phoneNo)){
-                            SetAlarm.SetAlarms(AddFriend.this, month, day, finalHour, finalMinute);
-                            Log.v("times", finalHour+":"+finalMinute+"  "+day);
-                            startActivity(new Intent(AddFriend.this,FriendListActivity.class));
-                            finish();
-                        }
-                    }
-
-
-
+                    new LoadData().execute();
                 }
             }
         });
@@ -243,5 +220,61 @@ public class AddFriend extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         startActivity(new Intent(AddFriend.this, FriendListActivity.class));
+    }
+
+    private class LoadData extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Bitmap bitmap = ((BitmapDrawable)proPic.getDrawable()).getBitmap();
+            imageByte = getBitmapAsByteArray(bitmap);
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setIndeterminateDrawable(doubleBounce);
+            fabAddPerson.setClickable(false);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressBar.setVisibility(View.GONE);
+            friend.setName(name);
+            friend.setPhoneNo(phoneNo);
+            friend.setFriendDate(date);
+            friend.setTimeFriend(finalHour+":"+finalMinute);
+            friend.setUserId(userId);
+            friend.setProfile(imageByte);
+
+            if (isEdit){
+                boolean b = databaseHelper.updatePerson(friend);
+                if (b){
+                    Toast.makeText(AddFriend.this, "Update Successfully", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(AddFriend.this, FriendListActivity.class));
+                    finish();
+                }
+            }else {
+                friend.setAmountBorrow(null);
+                friend.setAmountLoan(null);
+                friend.setFriend("T");
+                friend.setLoan("F");
+                friend.setBorrow("F");
+                friend.setLoanHasPaid(false);
+                friend.setBorrowHasPaid(false);
+                databaseHelper.addPerson(friend);
+
+                if(databaseHelper.checkPerson(name, phoneNo)){
+                    SetAlarm.SetAlarms(AddFriend.this, month, day, finalHour, finalMinute);
+                    Log.v("times", finalHour+":"+finalMinute+"  "+day);
+                    startActivity(new Intent(AddFriend.this,FriendListActivity.class));
+                    finish();
+                }
+            }
+
+        }
     }
 }
