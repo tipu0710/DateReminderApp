@@ -227,7 +227,7 @@ public class AddFriend extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             Bitmap bitmap = ((BitmapDrawable)proPic.getDrawable()).getBitmap();
-            imageByte = getBitmapAsByteArray(bitmap);
+            imageByte = getBitmapAsByteArray(ProfileActivity.getResizedBitmap(bitmap,500));
             return null;
         }
 
@@ -256,6 +256,8 @@ public class AddFriend extends AppCompatActivity {
                     Toast.makeText(AddFriend.this, "Update Successfully", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(AddFriend.this, FriendListActivity.class));
                     finish();
+                }else {
+                    Toast.makeText(AddFriend.this, "Problem occurred", Toast.LENGTH_SHORT).show();
                 }
             }else {
                 friend.setAmountBorrow(null);
@@ -265,13 +267,16 @@ public class AddFriend extends AppCompatActivity {
                 friend.setBorrow("F");
                 friend.setLoanHasPaid(false);
                 friend.setBorrowHasPaid(false);
-                databaseHelper.addPerson(friend);
+                boolean b = databaseHelper.addPerson(friend);
 
-                if(databaseHelper.checkPerson(name, phoneNo)){
+                if(b){
+                    Log.v("CheckSize", "Success");
                     SetAlarm.SetAlarms(AddFriend.this, month, day, finalHour, finalMinute);
                     Log.v("times", finalHour+":"+finalMinute+"  "+day);
                     startActivity(new Intent(AddFriend.this,FriendListActivity.class));
                     finish();
+                }else {
+                    Log.v("CheckSize", "Problem");
                 }
             }
 

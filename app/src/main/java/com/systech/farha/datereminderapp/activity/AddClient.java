@@ -302,7 +302,7 @@ public class AddClient extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             Bitmap bitmap = ((BitmapDrawable)proPic.getDrawable()).getBitmap();
-            imageByte = getBitmapAsByteArray(bitmap);
+            imageByte = getBitmapAsByteArray(ProfileActivity.getResizedBitmap(bitmap,500));
             return null;
         }
 

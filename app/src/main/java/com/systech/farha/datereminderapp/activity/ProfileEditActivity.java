@@ -5,18 +5,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.systech.farha.datereminderapp.R;
+import com.systech.farha.datereminderapp.alarm.SetAlarm;
 import com.systech.farha.datereminderapp.database.DatabaseHelper;
 import com.systech.farha.datereminderapp.helper.SessionManager;
 import com.systech.farha.datereminderapp.model.User;
@@ -27,6 +31,8 @@ import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.systech.farha.datereminderapp.activity.ProfileActivity.getBitmapAsByteArray;
+
 public class ProfileEditActivity extends AppCompatActivity {
     private ImageButton camera, gallery;
     private CircleImageView profilePic;
@@ -36,6 +42,10 @@ public class ProfileEditActivity extends AppCompatActivity {
     Integer userId;
     DatabaseHelper databaseHelper;
     SessionManager session;
+    private String name, phone, address;
+    private User userData;
+    private byte[] imageByte;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +61,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         addressEt = findViewById(R.id.edit_address);
         securityQues = findViewById(R.id.edit_security_question);
         changePassBtn = findViewById(R.id.edit_change_pass);
+        progressBar = findViewById(R.id.bar_edit_profile);
 
 
         session = new SessionManager(getApplicationContext());
@@ -58,7 +69,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         user = session.getLoginDetails();
         userId = Integer.valueOf(user.get(SessionManager.KEY_ID));
 
-        final User userData = databaseHelper.getUserById(userId);
+        userData = databaseHelper.getUserById(userId);
         Bitmap bitmap = BitmapFactory.decodeByteArray(userData.getProfile(), 0, userData.getProfile().length);
         profilePic.setImageBitmap(bitmap);
         nameEt.setText(userData.getName());
@@ -82,27 +93,16 @@ public class ProfileEditActivity extends AppCompatActivity {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name = nameEt.getText().toString();
-                String phone = phoneEt.getText().toString();
-                String address = addressEt.getText().toString();
+                name = nameEt.getText().toString();
+                phone = phoneEt.getText().toString();
+                address = addressEt.getText().toString();
                 if (name.isEmpty()){
                     nameEt.setError("This field is required!");
                 }else if (phone.isEmpty()){
                     phoneEt.setError("This field is required");
                 }else {
-                    if (address.isEmpty()){
-                        address = "";
-                    }
-                    userData.setName(name);
-                    userData.setPhone(phone);
-                    userData.setAddress(address);
-                    Bitmap bitmap = ((BitmapDrawable)profilePic.getDrawable()).getBitmap();
-                    userData.setProfile(ProfileActivity.getBitmapAsByteArray(bitmap));
-                    boolean b = databaseHelper.updateUser(userData);
-                    if (b){
-                        startActivity(new Intent(ProfileEditActivity.this, MainActivity.class));
-                        Toast.makeText(ProfileEditActivity.this, "Updated!", Toast.LENGTH_SHORT).show();
-                    }
+                    progressBar.setVisibility(View.VISIBLE);
+                    new LoadData().execute();
                 }
             }
         });
@@ -191,5 +191,50 @@ public class ProfileEditActivity extends AppCompatActivity {
         super.onBackPressed();
         startActivity(new Intent(ProfileEditActivity.this, MainActivity.class));
         finish();
+    }
+
+
+    private class LoadData extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Bitmap bitmap = ((BitmapDrawable)profilePic.getDrawable()).getBitmap();
+            imageByte = getBitmapAsByteArray(ProfileActivity.getResizedBitmap(bitmap,500));
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+            update.setClickable(false);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressBar.setVisibility(View.GONE);
+            update.setClickable(true);
+            userData.setName(name);
+            userData.setPhone(phone);
+            userData.setAddress(address);
+            userData.setProfile(imageByte);
+
+            if (address.isEmpty()){
+                address = "";
+            }
+            userData.setName(name);
+            userData.setPhone(phone);
+            userData.setAddress(address);
+            userData.setProfile(imageByte);
+            boolean b = databaseHelper.updateUser(userData);
+            if (b){
+                startActivity(new Intent(ProfileEditActivity.this, MainActivity.class));
+                Toast.makeText(ProfileEditActivity.this, "Updated!", Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
     }
 }

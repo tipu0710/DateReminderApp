@@ -19,24 +19,39 @@ import static com.systech.farha.datereminderapp.activity.MainActivity.PREFS_NAME
 public class SetAlarm {
     public static void SetAlarms(Context context, int month, int day, int hour, int minute) {
         Calendar calender = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calender1 = Calendar.getInstance();
-        calender.set(Calendar.MONTH, month);
-        calender.set(Calendar.DAY_OF_MONTH, day);
-        calender.set(Calendar.HOUR, hour);
-        calender.set(Calendar.MINUTE, minute);
-        calender.set(Calendar.SECOND, 0);
+        String mon, days;
+        if (month<10){
+            mon="0"+(month+1);
+        }else {
+            mon = String.valueOf(month+1);
+        }
+        if (day<10){
+            days = "0"+day;
+        }else {
+            days = String.valueOf(day);
+        }
 
+        int year = calender.get(Calendar.YEAR);
         if (month<calender1.get(Calendar.MONTH)){
-            calender.set(Calendar.YEAR, (calender.get(Calendar.YEAR)+1));
+            year++;
         }else if (month==calender1.get(Calendar.MONTH)){
             if (day<calender1.get(Calendar.DAY_OF_MONTH)){
-                calender.set(Calendar.YEAR, (calender.get(Calendar.YEAR)+1));
-            }else {
-                calender.set(Calendar.YEAR, (calender.get(Calendar.YEAR)));
+                year++;
             }
-        }else {
-            calender.set(Calendar.YEAR, (calender.get(Calendar.YEAR)));
         }
+        String date = year+"-"+mon+"-"+days;
+        try {
+            calender.setTime(sdf.parse(date));
+        } catch (ParseException e) {
+            Log.v("Times", e.getMessage());
+        }
+        calender.add(Calendar.HOUR, hour);
+        calender.add(Calendar.MINUTE, minute);
+        calender.set(Calendar.SECOND, 0);
+
+
         AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiver.class);
         int i =getPreference(context);

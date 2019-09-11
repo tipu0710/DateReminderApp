@@ -124,7 +124,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     //USER CRUD OPERATION
-    public void addUser(User user) {
+    public boolean addUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -139,8 +139,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(USER_ADDRESS, user.getAddress());
         values.put(USER_PROFILE_PIC, user.getProfile());
 
-        db.insert(TABLE_USER, null, values);
+        long b = db.insert(TABLE_USER, null, values);
         db.close();
+
+        return b!=-1;
     }
 
 
@@ -325,7 +327,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     //PERSON CRUD OPERATION
-    public void addPerson(Person person) {
+    public boolean addPerson(Person person) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -347,8 +349,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(PERSON_BORROW_HAS_PAID, person.getBorrowHasPaid());
         values.put(PERSON_PROFILE, person.getProfile());
 
-        db.insert(TABLE_PERSON, null, values);
+        long check = db.insert(TABLE_PERSON, null, values);
         db.close();
+
+        return check!=-1;
     }
 
     public List<Person> getLoanerList(int userId, String type) {
@@ -486,6 +490,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.close();
         }
 
+        Log.v("CheckSize", personList.size()+"   "+userId);
         return personList;
     }
 

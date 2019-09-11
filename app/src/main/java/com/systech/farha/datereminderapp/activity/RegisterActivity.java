@@ -3,21 +3,15 @@ package com.systech.farha.datereminderapp.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.systech.farha.datereminderapp.R;
 import com.systech.farha.datereminderapp.database.DatabaseHelper;
 import com.systech.farha.datereminderapp.helper.SessionManager;
-import com.systech.farha.datereminderapp.model.User;
-
-import static com.systech.farha.datereminderapp.activity.MainActivity.PREFS_NAME;
 import static com.systech.farha.datereminderapp.activity.MainActivity.REG_PREFS_NAME;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -77,26 +71,6 @@ public class RegisterActivity extends AppCompatActivity {
                         if (databaseHelper.checkUser(email)){
                             Toast.makeText(getApplicationContext(), "User Already Exists!", Toast.LENGTH_LONG).show();
                         } else {
-
-                           /* User user = new User();
-
-                            user.setName(name);
-                            user.setEmail(email);
-                            user.setPassword(pass);
-
-                            databaseHelper.addUser(user);
-
-                            if (databaseHelper.checkUser(email)) {
-                                Toast.makeText(getApplicationContext(), "Registration Successful!", Toast.LENGTH_LONG).show();
-
-                                int userId = databaseHelper.getUserIdByEmail(email);
-
-                                session.storeLoginSession(String.valueOf(userId), email);
-                                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-                                startActivity(i);
-                                finish();
-                            }*/
-
                            createPreference(name, email, pass);
                            startActivity(new Intent(RegisterActivity.this, QuestionActivity.class));
                         }

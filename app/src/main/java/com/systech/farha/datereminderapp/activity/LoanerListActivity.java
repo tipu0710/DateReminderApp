@@ -3,14 +3,12 @@ package com.systech.farha.datereminderapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,32 +20,21 @@ import com.systech.farha.datereminderapp.helper.SessionManager;
 import com.systech.farha.datereminderapp.model.Person;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
 public class LoanerListActivity extends AppCompatActivity {
-    private Person loaner;
     ListView listViewFriend;
 
-    TextView txtLabel,txtDate, alertTv,txtTime;
-    EditText txtName, txtPhoneNo, txtAmount;
-    FloatingActionButton fabAddPerson;
-
-    String name, phoneNo, date;
-    Double amount;
-    Boolean hasPaid = false;
-    final Calendar calendar = Calendar.getInstance();
+    TextView alertTv;
 
     SessionManager session;
     DatabaseHelper databaseHelper;
-    AlertDialog dialog;
     LoanerAdapter adapter;
     HashMap<String, String> user;
     Integer userId;
     List<Person> personList = new ArrayList<>();
     MaterialSearchBar materialSearchBar;
-    int finalHour, finalMinute, day, month = 0;
 
     public static final String LOAN = "loan";
 

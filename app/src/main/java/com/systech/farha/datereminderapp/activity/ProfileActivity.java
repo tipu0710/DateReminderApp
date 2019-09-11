@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -128,19 +129,36 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    public static Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
     public static byte[] getBitmapAsByteArray(Bitmap bitmap) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
         byte[] size = outputStream.toByteArray();
-        float length = (float) ((float) size.length/1024.0);
+        float length = (float) ((float) size.length/(1024.0*2));
+        Log.v("CheckSize", length+"");
 
-        if (length>2048){
-            Bitmap finalBitmap = Bitmap.createScaledBitmap(bitmap,(int)(bitmap.getWidth()*0.8), (int)(bitmap.getHeight()*0.8), true);
-            byte[] newByte = getBitmapAsByteArray(finalBitmap);
-            return newByte;
-        }else {
-            return size;
-        }
+//        if (length>2048){
+//            Bitmap finalBitmap = Bitmap.createScaledBitmap(bitmap,(int)(bitmap.getWidth()*0.8), (int)(bitmap.getHeight()*0.8), true);
+//            byte[] newByte = getBitmapAsByteArray(finalBitmap);
+//            return newByte;
+//        }else {
+//            return size;
+//        }
+        return size;
     }
 
     @Override
@@ -154,7 +172,7 @@ public class ProfileActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             Bitmap bitmap = ((BitmapDrawable)profilePic.getDrawable()).getBitmap();
-            imageByte = getBitmapAsByteArray(bitmap);
+            imageByte = getBitmapAsByteArray(getResizedBitmap(bitmap,500));
             return null;
         }
 
