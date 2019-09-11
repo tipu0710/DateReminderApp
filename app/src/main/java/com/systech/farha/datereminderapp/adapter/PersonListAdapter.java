@@ -142,7 +142,7 @@ public class PersonListAdapter extends BaseAdapter {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     DatabaseHelper databaseHelper = new DatabaseHelper(activity);
-                                    if (finalPerson.getLoan().equals("F")){
+                                    if (finalPerson.getLoan().equals("F") && finalPerson.getBorrow().equals("F")){
                                         databaseHelper.deletePerson(finalPerson);
                                     }else {
                                         finalPerson.setFriend("F");

@@ -75,6 +75,7 @@ public class AddClient extends AppCompatActivity {
 
     private ProgressBar progressBar;
     private Sprite doubleBounce;
+    private String h="00",m="00";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,16 +85,16 @@ public class AddClient extends AppCompatActivity {
         type = getIntent().getStringExtra("type");
         person = new Person();
 
-        txtLabel = findViewById(R.id.txt_label);
-        txtName = findViewById(R.id.txt_person_name);
-        txtPhoneNo = findViewById(R.id.txt_person_phone_no);
-        txtDate = findViewById(R.id.txt_person_date);
-        txtTime = findViewById(R.id.txt_person_time);
-        txtAmount = findViewById(R.id.txt_person_amount);
-        fabAddPerson = findViewById(R.id.fab_add_person);
-        proPic = findViewById(R.id.dialog_profile_c);
-        cameraBtn = findViewById(R.id.camera_dialog);
-        galleryBtn = findViewById(R.id.gallery_dialog);
+        txtLabel = findViewById(R.id.txt_label_client);
+        txtName = findViewById(R.id.txt_person_name_client);
+        txtPhoneNo = findViewById(R.id.txt_person_phone_no_client);
+        txtDate = findViewById(R.id.txt_person_date_client);
+        txtTime = findViewById(R.id.txt_person_time_client);
+        txtAmount = findViewById(R.id.txt_person_amount_client);
+        fabAddPerson = findViewById(R.id.fab_add_person_client);
+        proPic = findViewById(R.id.dialog_profile_c_client);
+        cameraBtn = findViewById(R.id.camera_dialog_client);
+        galleryBtn = findViewById(R.id.gallery_dialog_client);
         progressBar = findViewById(R.id.progress_client);
         doubleBounce = new Wave();
 
@@ -184,7 +185,17 @@ public class AddClient extends AppCompatActivity {
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         finalMinute = selectedMinute;
                         finalHour = selectedHour;
-                        txtTime.setText( selectedHour + ":" + selectedMinute);
+                        if (finalHour<10){
+                            h ="0"+finalHour;
+                        }else {
+                            h = ""+finalHour;
+                        }
+                        if (finalMinute<10){
+                            m ="0"+finalMinute;
+                        }else {
+                            m = ""+finalMinute;
+                        }
+                        txtTime.setText( h + ":" + m);
                     }
                 }, hour, minute, false);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
@@ -331,14 +342,14 @@ public class AddClient extends AppCompatActivity {
                     person.setBorrowHasPaid(hasPaid);
                     person.setUserId(userId);
                     person.setBorrowDate(date);
-                    person.setTimeBorrower(finalHour+":"+finalMinute);
+                    person.setTimeBorrower(h+":"+m);
                     person.setAmountBorrow(amount);
 
                     databaseHelper.addPerson(person);
                     break;
                 case BORROW_EDIT:
                     person.setBorrowDate(date);
-                    person.setTimeBorrower(finalHour+":"+finalMinute);
+                    person.setTimeBorrower(txtTime.getText().toString());
                     person.setAmountBorrow(amount);
                     databaseHelper.updatePerson(person);
                     break;
@@ -346,7 +357,7 @@ public class AddClient extends AppCompatActivity {
                     person.setBorrow("T");
                     person.setBorrowHasPaid(hasPaid);
                     person.setBorrowDate(date);
-                    person.setTimeBorrower(finalHour+":"+finalMinute);
+                    person.setTimeBorrower(h+":"+m);
                     person.setAmountBorrow(amount);
                     databaseHelper.updatePerson(person);
                     break;
@@ -358,13 +369,13 @@ public class AddClient extends AppCompatActivity {
                     person.setBorrowHasPaid(hasPaid);
                     person.setUserId(userId);
                     person.setLoanDate(date);
-                    person.setTimeLoner(finalHour+":"+finalMinute);
+                    person.setTimeLoner(h+":"+m);
                     person.setAmountLoan(amount);
                     databaseHelper.addPerson(person);
                     break;
                 case LOAN_EDIT:
                     person.setLoanDate(date);
-                    person.setTimeLoner(finalHour+":"+finalMinute);
+                    person.setTimeLoner(txtTime.getText().toString());
                     person.setAmountLoan(amount);
                     databaseHelper.updatePerson(person);
                     break;
@@ -372,7 +383,7 @@ public class AddClient extends AppCompatActivity {
                     person.setLoan("T");
                     person.setLoanHasPaid(hasPaid);
                     person.setLoanDate(date);
-                    person.setTimeLoner(finalHour+":"+finalMinute);
+                    person.setTimeLoner(h+":"+m);
                     person.setAmountLoan(amount);
                     databaseHelper.updatePerson(person);
                     break;

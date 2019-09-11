@@ -64,6 +64,7 @@ public class AddFriend extends AppCompatActivity {
     DatabaseHelper databaseHelper;
     HashMap<String, String> user;
     Integer userId;
+    private String h="00",m="00";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +95,7 @@ public class AddFriend extends AppCompatActivity {
             friend = databaseHelper.getPersonById(id);
             txtLabel.setText("Edit Friend");
             txtName.setText(friend.getName());
-            txtDate.setHint(friend.getFriendDate());
+            txtDate.setText(friend.getFriendDate());
             txtTime.setText(friend.getTimeFriend());
             txtPhoneNo.setText(friend.getPhoneNo());
             Bitmap bitmap = BitmapFactory.decodeByteArray(friend.getProfile(), 0, friend.getProfile().length);
@@ -131,7 +132,17 @@ public class AddFriend extends AppCompatActivity {
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         finalMinute = selectedMinute;
                         finalHour = selectedHour;
-                        txtTime.setText( selectedHour + ":" + selectedMinute);
+                        if (finalHour<10){
+                            h ="0"+finalHour;
+                        }else {
+                            h = ""+finalHour;
+                        }
+                        if (finalMinute<10){
+                            m ="0"+finalMinute;
+                        }else {
+                            m = ""+finalMinute;
+                        }
+                        txtTime.setText( h + ":" + m);
                     }
                 }, hour, minute, false);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
@@ -246,11 +257,11 @@ public class AddFriend extends AppCompatActivity {
             friend.setName(name);
             friend.setPhoneNo(phoneNo);
             friend.setFriendDate(date);
-            friend.setTimeFriend(finalHour+":"+finalMinute);
             friend.setUserId(userId);
             friend.setProfile(imageByte);
 
             if (isEdit){
+                friend.setTimeFriend(txtTime.getText().toString());
                 boolean b = databaseHelper.updatePerson(friend);
                 if (b){
                     Toast.makeText(AddFriend.this, "Update Successfully", Toast.LENGTH_SHORT).show();
@@ -260,6 +271,7 @@ public class AddFriend extends AppCompatActivity {
                     Toast.makeText(AddFriend.this, "Problem occurred", Toast.LENGTH_SHORT).show();
                 }
             }else {
+                friend.setTimeFriend(h+":"+m);
                 friend.setAmountBorrow(null);
                 friend.setAmountLoan(null);
                 friend.setFriend("T");

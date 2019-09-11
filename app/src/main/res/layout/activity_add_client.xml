@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
-            android:id="@+id/txt_label"
+            android:id="@+id/txt_label_client"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add Person"
@@ -25,7 +25,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_marginTop="20dp"
-            android:id="@+id/dialog_profile_c"
+            android:id="@+id/dialog_profile_c_client"
             android:src="@drawable/administrator"
             android:layout_gravity="center"
             android:layout_width="60dp"
@@ -38,14 +38,14 @@
             android:layout_height="wrap_content">
             <ImageButton
                 android:background="@drawable/slr_camera"
-                android:id="@+id/camera_dialog"
+                android:id="@+id/camera_dialog_client"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginEnd="20dp" />
             <ImageButton
                 android:background="@drawable/gallery"
-                android:id="@+id/gallery_dialog"
+                android:id="@+id/gallery_dialog_client"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginLeft="20dp"
@@ -55,35 +55,35 @@
 
         <EditText
             android:layout_marginTop="20dp"
-            android:id="@+id/txt_person_name"
+            android:id="@+id/txt_person_name_client"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter Person Name" />
 
 
         <EditText
-            android:id="@+id/txt_person_phone_no"
+            android:id="@+id/txt_person_phone_no_client"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="phone"
             android:hint="Enter Phone Number" />
 
         <EditText
-            android:id="@+id/txt_person_amount"
+            android:id="@+id/txt_person_amount_client"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter Amount"
             android:inputType="number"/>
 
         <TextView
-            android:id="@+id/txt_person_date"
+            android:id="@+id/txt_person_date_client"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:textSize="17sp"
             android:hint="Enter Date" />
         <TextView
-            android:id="@+id/txt_person_time"
+            android:id="@+id/txt_person_time_client"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -91,7 +91,7 @@
             android:hint="Enter Time" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_add_person"
+            android:id="@+id/fab_add_person_client"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

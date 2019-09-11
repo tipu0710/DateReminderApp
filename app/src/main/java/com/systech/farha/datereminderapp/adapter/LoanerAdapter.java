@@ -181,7 +181,7 @@ public class LoanerAdapter extends BaseAdapter {
                                 public void onClick(DialogInterface dialog, int which) {
 
                                     DatabaseHelper databaseHelper = new DatabaseHelper(activity);
-                                    if (finalPerson.getFriend().equals("F")){
+                                    if (finalPerson.getFriend().equals("F") && finalPerson.getBorrow().equals("F")){
                                         databaseHelper.deletePerson(finalPerson);
                                     }else {
                                         finalPerson.setLoan("F");
