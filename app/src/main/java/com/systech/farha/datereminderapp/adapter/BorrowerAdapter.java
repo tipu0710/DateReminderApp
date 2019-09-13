@@ -3,39 +3,26 @@ package com.systech.farha.datereminderapp.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RectShape;
-import android.support.design.widget.FloatingActionButton;
-import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.systech.farha.datereminderapp.R;
-import com.systech.farha.datereminderapp.activity.AddClient;
-import com.systech.farha.datereminderapp.activity.BorrowerListActivity;
+import com.systech.farha.datereminderapp.activity.Others.AddClient;
+import com.systech.farha.datereminderapp.activity.Others.BorrowerListActivity;
 import com.systech.farha.datereminderapp.alarm.SetAlarm;
 import com.systech.farha.datereminderapp.database.DatabaseHelper;
 import com.systech.farha.datereminderapp.model.Person;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -157,7 +144,6 @@ public class BorrowerAdapter  extends BaseAdapter {
                         public void onClick(View v) {
                             Person p = personArrayList.get(position);
                             p.setBorrowHasPaid(true);
-                            p.setName("tipu");
 
                             DatabaseHelper helper = new DatabaseHelper(activity);
                             helper.updatePerson(p);

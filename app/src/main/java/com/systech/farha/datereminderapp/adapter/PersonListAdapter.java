@@ -3,35 +3,24 @@ package com.systech.farha.datereminderapp.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.nfc.Tag;
-import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.systech.farha.datereminderapp.R;
-import com.systech.farha.datereminderapp.activity.AddFriend;
-import com.systech.farha.datereminderapp.activity.FriendListActivity;
+import com.systech.farha.datereminderapp.activity.Others.AddFriend;
+import com.systech.farha.datereminderapp.activity.Others.FriendListActivity;
 import com.systech.farha.datereminderapp.alarm.SetAlarm;
 import com.systech.farha.datereminderapp.database.DatabaseHelper;
 import com.systech.farha.datereminderapp.model.Person;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 

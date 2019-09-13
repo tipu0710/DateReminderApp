@@ -7,7 +7,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".activity.QuestionActivity">
+    tools:context=".activity.AuthActivity.QuestionActivity">
 
     <EditText
         android:hint="Type your 1st security question here"
@@ -30,12 +30,24 @@
         android:hint="Type your answer of 2nd security question here"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="next"
-        android:id="@+id/question_next"
-        android:layout_marginTop="20dp"/>
+    <RelativeLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="skip"
+            android:layout_marginStart="20dp"
+            android:layout_alignParentStart="true"
+            android:id="@+id/question_skip"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="set questions"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/question_next"/>
+    </RelativeLayout>
 
 </LinearLayout>

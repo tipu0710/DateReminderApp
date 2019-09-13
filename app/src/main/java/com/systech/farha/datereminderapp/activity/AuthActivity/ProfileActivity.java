@@ -1,4 +1,4 @@
-package com.systech.farha.datereminderapp.activity;
+package com.systech.farha.datereminderapp.activity.AuthActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,9 +20,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.github.ybq.android.spinkit.style.Wave;
 import com.systech.farha.datereminderapp.R;
+import com.systech.farha.datereminderapp.activity.Others.MainActivity;
 import com.systech.farha.datereminderapp.database.DatabaseHelper;
 import com.systech.farha.datereminderapp.helper.SessionManager;
 import com.systech.farha.datereminderapp.model.User;
@@ -32,9 +32,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import id.zelory.compressor.Compressor;
 
-import static com.systech.farha.datereminderapp.activity.MainActivity.REG_PREFS_NAME;
+import static com.systech.farha.datereminderapp.activity.Others.MainActivity.REG_PREFS_NAME;
 
 public class ProfileActivity extends AppCompatActivity {
     private ImageButton camera, gallery;
@@ -191,22 +190,24 @@ public class ProfileActivity extends AppCompatActivity {
             SharedPreferences prefs = getSharedPreferences(REG_PREFS_NAME, MODE_PRIVATE);
             User user = new User();
             user.setName(prefs.getString("name", null));
+            user.setUserName(prefs.getString("userName", null));
             user.setEmail(prefs.getString("email",null));
             user.setPassword(prefs.getString("password", null));
             user.setQuestion1(prefs.getString("ques1", null));
             user.setQuestion2(prefs.getString("ques2",null));
             user.setAnswer1(prefs.getString("ans1", null));
             user.setAnswer2(prefs.getString("ans2", null));
+            user.setQuestionSkipped(prefs.getBoolean("isQuestionSkipped", false));
             user.setPhone(phone);
             user.setAddress(address);
             user.setProfile(imageByte);
 
             databaseHelper.addUser(user);
 
-            if (databaseHelper.checkUser(user.getEmail())) {
-                int userId = databaseHelper.getUserIdByEmail(user.getEmail());
+            if (databaseHelper.checkUserName(user.getUserName())) {
+                int userId = databaseHelper.getUserIdByUserName(user.getUserName());
 
-                session.storeLoginSession(String.valueOf(userId), user.getEmail());
+                session.storeLoginSession(String.valueOf(userId), user.getUserName());
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 getSharedPreferences(REG_PREFS_NAME, MODE_PRIVATE).edit().clear().apply();
 

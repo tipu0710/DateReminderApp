@@ -5,16 +5,14 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.systech.farha.datereminderapp.activity.MainActivity.PREFS_NAME;
+import static com.systech.farha.datereminderapp.activity.Others.MainActivity.PREFS_NAME;
 
 public class SetAlarm {
     public static void SetAlarms(Context context, int month, int day, int hour, int minute) {

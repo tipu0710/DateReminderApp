@@ -1,13 +1,11 @@
-package com.systech.farha.datereminderapp.activity;
+package com.systech.farha.datereminderapp.activity.Others;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -15,7 +13,7 @@ import android.widget.TextView;
 
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.systech.farha.datereminderapp.R;
-import com.systech.farha.datereminderapp.adapter.PersonListAdapter;
+import com.systech.farha.datereminderapp.adapter.BorrowerAdapter;
 import com.systech.farha.datereminderapp.database.DatabaseHelper;
 import com.systech.farha.datereminderapp.helper.SessionManager;
 import com.systech.farha.datereminderapp.model.Person;
@@ -24,29 +22,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FriendListActivity extends AppCompatActivity {
-
+public class BorrowerListActivity extends AppCompatActivity {
+    public static final String BORROW = "borrow";
     ListView listViewFriend;
-    FloatingActionButton fabAddFriend;
 
     TextView alertTv;
 
-
     SessionManager session;
     DatabaseHelper databaseHelper;
-    PersonListAdapter adapter;
+    BorrowerAdapter adapter;
     HashMap<String, String> user;
     Integer userId;
     List<Person> personList = new ArrayList<>();
+
     MaterialSearchBar materialSearchBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friend_list);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+        setContentView(R.layout.activity_borrower);
+        getSupportActionBar().setTitle("Borrower List"); // for set actionbar title
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         initializeView();
     }
 
@@ -54,21 +50,20 @@ public class FriendListActivity extends AppCompatActivity {
 
         session = new SessionManager(getApplicationContext());
         databaseHelper = new DatabaseHelper(getApplicationContext());
-
-        listViewFriend = findViewById(R.id.lv_friend_list);
-        fabAddFriend = findViewById(R.id.fab_add_riend);
-        materialSearchBar = findViewById(R.id.friend_search);
-        alertTv = findViewById(R.id.friend_alert_tv);
+        listViewFriend = findViewById(R.id.borrower_friend_list);
+        FloatingActionButton borrowerFab = findViewById(R.id.borrower_fab);
+        materialSearchBar = findViewById(R.id.borrow_search);
+        alertTv = findViewById(R.id.borrower_alert_tv);
 
         user = session.getLoginDetails();
         userId = Integer.valueOf(user.get(SessionManager.KEY_ID));
-        personList = databaseHelper.getFriendList(userId, "T");
+        personList = databaseHelper.getBorrowList(userId, "T");
         if (personList.size()==0){
             alertTv.setVisibility(View.VISIBLE);
         }else {
             alertTv.setVisibility(View.INVISIBLE);
         }
-        adapter = new PersonListAdapter(this, personList);
+        adapter = new BorrowerAdapter(this, personList, false);
         listViewFriend.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -82,10 +77,9 @@ public class FriendListActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                 if (s.toString().isEmpty()){
-                    personList = databaseHelper.getFriendList(userId,"T");
-                    adapter = new PersonListAdapter(FriendListActivity.this, personList);
+                    personList = databaseHelper.getBorrowList(userId,"T");
+                    adapter = new BorrowerAdapter(BorrowerListActivity.this, personList, true);
                     listViewFriend.setAdapter(adapter);
                 }else {
                     startSearch(s.toString());
@@ -107,16 +101,15 @@ public class FriendListActivity extends AppCompatActivity {
             @Override
             public void onSearchStateChanged(boolean enabled) {
                 if (!enabled){
-                    personList = databaseHelper.getFriendList(userId, "T");
+                    personList = databaseHelper.getBorrowList(userId, "T");
                     if (personList.size()==0){
                         alertTv.setVisibility(View.VISIBLE);
-                        alertTv.setText("Friend not available!");
+                        alertTv.setText("Borrower not available!");
                     }else {
                         alertTv.setVisibility(View.INVISIBLE);
                     }
-                    adapter = new PersonListAdapter(FriendListActivity.this, personList);
+                    adapter = new BorrowerAdapter(BorrowerListActivity.this, personList, false);
                     listViewFriend.setAdapter(adapter);
-
                 }
             }
 
@@ -131,6 +124,7 @@ public class FriendListActivity extends AppCompatActivity {
             }
         });
 
+
         listViewFriend.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -138,22 +132,24 @@ public class FriendListActivity extends AppCompatActivity {
             }
         });
 
-        fabAddFriend.setOnClickListener(new View.OnClickListener() {
+        borrowerFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(FriendListActivity.this, AddFriend.class));
+                Intent intent = new Intent(BorrowerListActivity.this, AddClient.class);
+                intent.putExtra("type", BORROW);
+                startActivity(intent);
             }
         });
 
     }
 
     private void startSearch(String text) {
-        if (databaseHelper.getFriendByName(text).size()==0){
+        if (databaseHelper.getPersonByName(text).size()==0){
             alertTv.setVisibility(View.VISIBLE);
         }else {
             alertTv.setVisibility(View.INVISIBLE);
         }
-        adapter = new PersonListAdapter(this, databaseHelper.getFriendByName(text));
+        adapter = new BorrowerAdapter(this, databaseHelper.getPersonByName(text), true);
         listViewFriend.setAdapter(adapter);
     }
 
@@ -162,4 +158,5 @@ public class FriendListActivity extends AppCompatActivity {
         super.onBackPressed();
         startActivity(new Intent(this, MainActivity.class));
     }
+
 }

@@ -28,6 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String USER_ID = "id";
     private static final String USER_NAME = "user_name";
     private static final String USER_EMAIL = "user_email";
+    private static final String USER_USERNAME = "user_username";
     private static final String USER_PASSWORD = "user_password";
     private static final String USER_QUESTION_1 = "user_question_1";
     private static final String USER_QUESTION_2 = "user_question_2";
@@ -35,18 +36,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String USER_ANSWER_2 = "user_answer_2";
     private static final String USER_PHONE = "user_phone";
     private static final String USER_ADDRESS = "user_address";
+    private static final String USER_QUESTION_SKIPPED = "user_is_ques_skipped";
     private static final String USER_PROFILE_PIC = "user_profile_pic";
 
     private String CREATE_USER_TABLE
             = "CREATE TABLE " + TABLE_USER + "("
             + USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + USER_NAME + " TEXT NOT NULL,"
-            + USER_EMAIL + " TEXT NOT NULL,"
+            + USER_USERNAME + " TEXT NOT NULL,"
+            + USER_EMAIL + " TEXT,"
             + USER_PASSWORD + " TEXT NOT NULL,"
             + USER_QUESTION_1 + " TEXT NOT NULL,"
             + USER_QUESTION_2 + " TEXT NOT NULL,"
             + USER_ANSWER_1 + " TEXT NOT NULL,"
             + USER_ANSWER_2 + " TEXT NOT NULL,"
+            + USER_QUESTION_SKIPPED + " INTEGER DEFAULT 0,"
             + USER_PHONE + " TEXT NOT NULL,"
             + USER_ADDRESS + " TEXT,"
             + USER_PROFILE_PIC + " BLOB NOT NULL"
@@ -129,12 +133,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(USER_NAME, user.getName());
+        values.put(USER_USERNAME, user.getUserName());
         values.put(USER_EMAIL, user.getEmail());
         values.put(USER_PASSWORD, user.getPassword());
         values.put(USER_QUESTION_1, user.getQuestion1());
         values.put(USER_ANSWER_1, user.getAnswer1());
         values.put(USER_QUESTION_2, user.getQuestion2());
         values.put(USER_ANSWER_2, user.getAnswer2());
+        values.put(USER_QUESTION_SKIPPED, user.isQuestionSkipped());
         values.put(USER_PHONE, user.getPhone());
         values.put(USER_ADDRESS, user.getAddress());
         values.put(USER_PROFILE_PIC, user.getProfile());
@@ -149,6 +155,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<User> getAllUser() {
         String[] columns = {
                 USER_ID,
+                USER_USERNAME,
                 USER_EMAIL,
                 USER_NAME,
                 USER_PASSWORD,
@@ -170,6 +177,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 User user = new User();
                 user.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(USER_ID))));
                 user.setName(cursor.getString(cursor.getColumnIndex(USER_NAME)));
+                user.setUserName(cursor.getString(cursor.getColumnIndex(USER_USERNAME)));
                 user.setEmail(cursor.getString(cursor.getColumnIndex(USER_EMAIL)));
                 user.setPassword(cursor.getString(cursor.getColumnIndex(USER_PASSWORD)));
                 user.setPhone(cursor.getString(cursor.getColumnIndex(USER_PHONE)));
@@ -188,12 +196,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(USER_NAME, user.getName());
+        values.put(USER_USERNAME, user.getUserName());
         values.put(USER_EMAIL, user.getEmail());
         values.put(USER_PASSWORD, user.getPassword());
         values.put(USER_QUESTION_1, user.getQuestion1());
         values.put(USER_QUESTION_2, user.getQuestion2());
         values.put(USER_ANSWER_1, user.getAnswer1());
         values.put(USER_ANSWER_2, user.getAnswer2());
+        values.put(USER_QUESTION_SKIPPED, user.isQuestionSkipped());
         values.put(USER_PHONE, user.getPhone());
         values.put(USER_ADDRESS, user.getAddress());
         values.put(USER_PROFILE_PIC, user.getProfile());
@@ -211,7 +221,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public boolean checkUser(String email) {
+    public boolean checkUserEmail(String email) {
 
         String[] columns = {
                 USER_ID
@@ -232,7 +242,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public int getUserIdByEmail(String email) {
+    public boolean checkUserName(String userName) {
+
+        String[] columns = {
+                USER_ID
+        };
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selection = USER_USERNAME + " = ?";
+
+        String[] selectionArgs = {userName};
+
+
+        Cursor cursor = db.query(TABLE_USER, columns, selection, selectionArgs, null, null, null);
+        int cursorCount = cursor.getCount();
+        cursor.close();
+        db.close();
+
+        return cursorCount > 0;
+
+    }
+
+/*    public int getUserIdByEmail(String email) {
 
         int userId = 0;
         Cursor cursor = null;
@@ -255,23 +286,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
             db.close();
         }
+    }*/
+
+    public int getUserIdByUserName(String userName) {
+
+        int userId = 0;
+        Cursor cursor = null;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String sqlQuery = "SELECT " + USER_ID + " FROM " + TABLE_USER
+                + " WHERE " + USER_USERNAME + " = ? ";
+
+        try {
+            cursor = db.rawQuery(sqlQuery, new String[]{userName});
+
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                userId = cursor.getInt(cursor.getColumnIndex(USER_ID));
+            }
+
+            return userId;
+        } finally {
+            cursor.close();
+            db.close();
+        }
     }
 
     public User getUserById(int id) {
         String name = "name";
         String email = "email";
         String password = null;
+        String userName = null;
+        boolean isQuestionSkipped = false;
         String question1= null, answer1= null, question2= null, answer2 = null, phone = null, address = null;
         byte[] profile = null;
 
         String[] columns = {
                 USER_EMAIL,
                 USER_NAME,
+                USER_USERNAME,
                 USER_PASSWORD,
                 USER_QUESTION_1,
                 USER_ANSWER_1,
                 USER_QUESTION_2,
                 USER_ANSWER_2,
+                USER_QUESTION_SKIPPED,
                 USER_PHONE,
                 USER_ADDRESS,
                 USER_PROFILE_PIC
@@ -286,30 +346,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
             email = cursor.getString(cursor.getColumnIndex(USER_EMAIL));
             name = cursor.getString(cursor.getColumnIndex(USER_NAME));
+            userName = cursor.getString(cursor.getColumnIndex(USER_USERNAME));
             password = cursor.getString(cursor.getColumnIndex(USER_PASSWORD));
             question1 = cursor.getString(cursor.getColumnIndex(USER_QUESTION_1));
             answer1 = cursor.getString(cursor.getColumnIndex(USER_ANSWER_1));
             question2 = cursor.getString(cursor.getColumnIndex(USER_QUESTION_2));
             answer2 = cursor.getString(cursor.getColumnIndex(USER_ANSWER_2));
+            isQuestionSkipped = (cursor.getInt(cursor.getColumnIndex(USER_QUESTION_SKIPPED))==1);
             phone = cursor.getString(cursor.getColumnIndex(USER_PHONE));
             address = cursor.getString(cursor.getColumnIndex(USER_ADDRESS));
             profile = cursor.getBlob(cursor.getColumnIndex(USER_PROFILE_PIC));
         }
-        User user = new User(id, name, email, password, question1, answer1, question2, answer2, phone, address, profile);
 
-        return user;
+        return new User(id, name, userName, email, password, question1, answer1, question2, answer2, phone, address, profile, isQuestionSkipped);
     }
 
-
-    public boolean validateUser(String email, String password) {
+    public boolean validateUser(String userName, String password) {
 
         String[] columns = {
                 USER_ID
         };
         SQLiteDatabase db = this.getReadableDatabase();
-        String selection = USER_EMAIL + " = ?" + " AND " + USER_PASSWORD + " = ?";
+        String selection = USER_USERNAME + " = ?" + " AND " + USER_PASSWORD + " = ?";
 
-        String[] selectionArgs = {email, password};
+        String[] selectionArgs = {userName, password};
 
 
         Cursor cursor = db.query(TABLE_USER, columns, selection, selectionArgs, null, null, null);
@@ -318,11 +378,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cursor.close();
         db.close();
-        if (cursorCount > 0) {
-            return true;
-        }
-
-        return false;
+        return cursorCount > 0;
     }
 
 

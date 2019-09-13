@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity.FriendListActivity"
+    tools:context=".activity.Others.FriendListActivity"
     tools:showIn="@layout/activity_friend_list">
 
     <ListView

@@ -1,26 +1,26 @@
-package com.systech.farha.datereminderapp.activity;
+package com.systech.farha.datereminderapp.activity.AuthActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.systech.farha.datereminderapp.R;
+import com.systech.farha.datereminderapp.activity.Others.MainActivity;
 import com.systech.farha.datereminderapp.database.DatabaseHelper;
 import com.systech.farha.datereminderapp.helper.SessionManager;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText txtEmail, txtPassword;
+    private EditText txtUserName, txtPassword;
     private TextView txtRegister, txtAccount, txtForgot;
     Button buttonLogin;
-    String userEmail, password;
+    String userName, password;
 
     SessionManager session;
     DatabaseHelper databaseHelper;
@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
 
-        txtEmail = findViewById(R.id.txt_email);
+        txtUserName = findViewById(R.id.txt_user_name_login);
         txtPassword = findViewById(R.id.txt_password);
         buttonLogin = findViewById(R.id.button_login);
         txtRegister = findViewById(R.id.txt_register);
@@ -56,25 +56,29 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                userEmail = txtEmail.getText().toString();
+                userName = txtUserName.getText().toString();
                 password = txtPassword.getText().toString();
 
-                if (userEmail.isEmpty()){
-                    txtEmail.setError("Enter Email");
+                if (userName.isEmpty()){
+                    txtUserName.setError("Enter username");
                 }else if (password.isEmpty()){
                     txtPassword.setError("Enter password");
                 }else {
-                    if (databaseHelper.checkUser(userEmail)){
-                        if(databaseHelper.validateUser(userEmail, password)){
+                    if (databaseHelper.checkUserName(userName)){
+                        if(databaseHelper.validateUser(userName, password)){
 
-                            int userId = databaseHelper.getUserIdByEmail(userEmail);
+                            int userId = databaseHelper.getUserIdByUserName(userName);
 
-                            session.storeLoginSession(String.valueOf(userId), userEmail);
+                            session.storeLoginSession(String.valueOf(userId), userName);
 
                             Intent i = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(i);
                             finish();
+                        }else {
+                            Toast.makeText(LoginActivity.this, "User name or password is incorrect", Toast.LENGTH_SHORT).show();
                         }
+                    }else {
+                        Toast.makeText(LoginActivity.this, "User name not found!", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -106,4 +110,12 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
 }

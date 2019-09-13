@@ -7,15 +7,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 
 import com.systech.farha.datereminderapp.R;
-import com.systech.farha.datereminderapp.activity.EventActivity;
+import com.systech.farha.datereminderapp.activity.Others.EventActivity;
 
 class NotificationHelper extends ContextWrapper {
     public static final String channelID = "channelID";

@@ -1,7 +1,5 @@
 package com.systech.farha.datereminderapp.alarm;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
@@ -13,7 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.systech.farha.datereminderapp.R;
-import com.systech.farha.datereminderapp.activity.MainActivity;
+import com.systech.farha.datereminderapp.activity.Others.MainActivity;
 
 public class Alert extends AppCompatActivity {
     MediaPlayer mp;

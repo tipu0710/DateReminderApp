@@ -7,7 +7,7 @@
     android:gravity="center"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity.RegisterActivity"
+    tools:context=".activity.AuthActivity.RegisterActivity"
     tools:showIn="@layout/activity_register">
 
     <EditText
@@ -17,11 +17,18 @@
         android:hint="Enter Name"/>
 
     <EditText
-        android:id="@+id/txt_email"
+        android:id="@+id/txt_user_name"
         android:inputType="textEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Email"/>
+        android:hint="User name"/>
+
+    <EditText
+        android:id="@+id/txt_user_name_login"
+        android:inputType="textEmailAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Email(optional)"/>
 
     <EditText
         android:id="@+id/txt_password"

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    tools:context=".activity.ChangePasswordActivity">
+    tools:context=".activity.AuthActivity.ChangePasswordActivity">
 
     <TextView
         android:text="Enter old password"

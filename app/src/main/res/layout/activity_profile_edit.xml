@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ProfileEditActivity">
+    tools:context=".activity.AuthActivity.ProfileEditActivity">
 
     <RelativeLayout
+        android:paddingBottom="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <de.hdodenhof.circleimageview.CircleImageView
@@ -59,6 +60,20 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/edit_email"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:textAlignment="center"
+            android:hint="email"
+            android:layout_below="@id/edit_name"
+            android:layout_centerHorizontal="true"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/edit_phone"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
@@ -67,7 +82,7 @@
             android:layout_marginTop="20dp"
             android:textAlignment="center"
             android:hint="phone number"
-            android:layout_below="@id/edit_name"
+            android:layout_below="@id/edit_email"
             android:layout_centerHorizontal="true"/>
 
         <EditText

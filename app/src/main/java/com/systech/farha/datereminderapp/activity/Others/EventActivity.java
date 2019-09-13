@@ -1,4 +1,4 @@
-package com.systech.farha.datereminderapp.activity;
+package com.systech.farha.datereminderapp.activity.Others;
 
 import android.app.job.JobScheduler;
 import android.content.Intent;

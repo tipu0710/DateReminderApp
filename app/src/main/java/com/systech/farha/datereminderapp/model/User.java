@@ -3,6 +3,7 @@ package com.systech.farha.datereminderapp.model;
 public class User {
     private Integer id;
     private String name;
+    private String userName;
     private String email;
     private String password;
     private String question1;
@@ -11,13 +12,15 @@ public class User {
     private String answer2;
     private String phone;
     private String address;
+    private boolean isQuestionSkipped;
     private byte[] profile;
 
-    public User(Integer id, String name, String email,
+    public User(Integer id, String name, String userName, String email,
                 String password, String question1, String answer1, String question2,
-                String answer2, String phone, String address, byte[] profile) {
+                String answer2, String phone, String address, byte[] profile, boolean isQuestionSkipped) {
         this.id = id;
         this.name = name;
+        this.userName = userName;
         this.email = email;
         this.password = password;
         this.question1 = question1;
@@ -27,10 +30,19 @@ public class User {
         this.profile = profile;
         this.phone = phone;
         this.address = address;
+        this.isQuestionSkipped = isQuestionSkipped;
     }
 
 
     public User() {
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPhone() {
@@ -119,6 +131,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isQuestionSkipped() {
+        return isQuestionSkipped;
+    }
+
+    public void setQuestionSkipped(boolean questionSkipped) {
+        isQuestionSkipped = questionSkipped;
     }
 }
 

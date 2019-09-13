@@ -1,9 +1,8 @@
-package com.systech.farha.datereminderapp.activity;
+package com.systech.farha.datereminderapp.activity.Others;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -28,11 +27,11 @@ import android.widget.Toast;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.Wave;
 import com.systech.farha.datereminderapp.R;
+import com.systech.farha.datereminderapp.activity.AuthActivity.ProfileActivity;
 import com.systech.farha.datereminderapp.alarm.SetAlarm;
 import com.systech.farha.datereminderapp.database.DatabaseHelper;
 import com.systech.farha.datereminderapp.helper.SessionManager;
 import com.systech.farha.datereminderapp.model.Person;
-import com.systech.farha.datereminderapp.model.User;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -40,8 +39,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 
-import static com.systech.farha.datereminderapp.activity.MainActivity.REG_PREFS_NAME;
-import static com.systech.farha.datereminderapp.activity.ProfileActivity.getBitmapAsByteArray;
+import static com.systech.farha.datereminderapp.activity.AuthActivity.ProfileActivity.getBitmapAsByteArray;
 
 public class AddFriend extends AppCompatActivity {
     private Person friend;

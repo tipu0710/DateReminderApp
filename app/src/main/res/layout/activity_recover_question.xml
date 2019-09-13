@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    tools:context=".activity.RecoverQuestionActivity">
+    tools:context=".activity.AuthActivity.RecoverQuestionActivity">
     <TextView
         android:text="Please enter the answer as you\nenter before"
         android:layout_marginTop="80dp"

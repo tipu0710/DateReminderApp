@@ -5,8 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-import com.systech.farha.datereminderapp.activity.LoginActivity;
-import com.systech.farha.datereminderapp.activity.MainActivity;
+import com.systech.farha.datereminderapp.activity.AuthActivity.LoginActivity;
 
 import java.util.HashMap;
 
@@ -29,11 +28,11 @@ public class SessionManager {
         editor = preferences.edit();
     }
 
-    public void storeLoginSession(String name, String email){
+    public void storeLoginSession(String name, String userName){
 
         editor.putBoolean(IS_LOGIN, true);
         editor.putString(KEY_ID, name);
-        editor.putString(KEY_EMAIL, email);
+        editor.putString(KEY_EMAIL, userName);
         editor.commit();
     }
 

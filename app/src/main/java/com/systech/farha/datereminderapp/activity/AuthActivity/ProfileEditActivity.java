@@ -1,4 +1,4 @@
-package com.systech.farha.datereminderapp.activity;
+package com.systech.farha.datereminderapp.activity.AuthActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,6 +11,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.systech.farha.datereminderapp.R;
-import com.systech.farha.datereminderapp.alarm.SetAlarm;
+import com.systech.farha.datereminderapp.activity.Others.MainActivity;
 import com.systech.farha.datereminderapp.database.DatabaseHelper;
 import com.systech.farha.datereminderapp.helper.SessionManager;
 import com.systech.farha.datereminderapp.model.User;
@@ -31,21 +33,23 @@ import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.systech.farha.datereminderapp.activity.ProfileActivity.getBitmapAsByteArray;
+import static com.systech.farha.datereminderapp.activity.AuthActivity.ProfileActivity.getBitmapAsByteArray;
+import static com.systech.farha.datereminderapp.activity.AuthActivity.RegisterActivity.isEmailValid;
 
 public class ProfileEditActivity extends AppCompatActivity {
     private ImageButton camera, gallery;
     private CircleImageView profilePic;
     private Button update, securityQues, changePassBtn;
-    private EditText nameEt, phoneEt, addressEt;
+    private EditText nameEt, phoneEt, addressEt, emailEt;
     HashMap<String, String> user;
     Integer userId;
     DatabaseHelper databaseHelper;
     SessionManager session;
-    private String name, phone, address;
+    private String name, phone, address, email;
     private User userData;
     private byte[] imageByte;
     private ProgressBar progressBar;
+    private boolean emailChecker, validEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         nameEt = findViewById(R.id.edit_name);
         phoneEt = findViewById(R.id.edit_phone);
         addressEt = findViewById(R.id.edit_address);
+        emailEt = findViewById(R.id.edit_email);
         securityQues = findViewById(R.id.edit_security_question);
         changePassBtn = findViewById(R.id.edit_change_pass);
         progressBar = findViewById(R.id.bar_edit_profile);
@@ -75,6 +80,42 @@ public class ProfileEditActivity extends AppCompatActivity {
         nameEt.setText(userData.getName());
         phoneEt.setText(userData.getPhone());
         addressEt.setText(userData.getAddress());
+        emailEt.setText(userData.getEmail());
+
+        emailEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                validEmail = isEmailValid(editable.toString());
+                Log.v("emailChek", editable.toString()+"  "+userData.getEmail());
+                if (!editable.toString().isEmpty()){
+                    if (databaseHelper.checkUserEmail(editable.toString()) || !validEmail){
+                        emailEt.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable. ic_close_black_24dp, 0);
+                        emailChecker = false;
+                    }else {
+                        emailEt.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable. ic_check_black_24dp, 0);
+                        emailChecker = true;
+                    }
+
+                    if (userData.getEmail().equals(emailEt.getText().toString())){
+                        emailEt.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable. ic_check_black_24dp, 0);
+                        emailChecker = true;
+                    }
+
+                }else {
+                    emailEt.setCompoundDrawablesWithIntrinsicBounds( 0, 0, 0, 0);
+                }
+            }
+        });
 
         changePassBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,8 +137,13 @@ public class ProfileEditActivity extends AppCompatActivity {
                 name = nameEt.getText().toString();
                 phone = phoneEt.getText().toString();
                 address = addressEt.getText().toString();
+                email = emailEt.getText().toString();
                 if (name.isEmpty()){
                     nameEt.setError("This field is required!");
+                }else if (!validEmail && !email.isEmpty()){
+                    emailEt.setError("Enter valid email!");
+                }else if (!emailChecker && !email.isEmpty()){
+                    emailEt.setError("This email is already used!");
                 }else if (phone.isEmpty()){
                     phoneEt.setError("This field is required");
                 }else {
@@ -224,6 +270,12 @@ public class ProfileEditActivity extends AppCompatActivity {
             if (address.isEmpty()){
                 address = "";
             }
+
+            if (email.isEmpty()){
+                email = "";
+            }
+
+            userData.setEmail(email);
             userData.setName(name);
             userData.setPhone(phone);
             userData.setAddress(address);
@@ -232,6 +284,7 @@ public class ProfileEditActivity extends AppCompatActivity {
             if (b){
                 startActivity(new Intent(ProfileEditActivity.this, MainActivity.class));
                 Toast.makeText(ProfileEditActivity.this, "Updated!", Toast.LENGTH_SHORT).show();
+                finish();
             }
 
 
